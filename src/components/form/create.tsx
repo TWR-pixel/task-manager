@@ -16,6 +16,7 @@ const Wrapper = styled.div`
 
 const StyledButton = styled.button`
   padding: 10px 20px;
+  border-radius: 15px;
 `;
 
 interface FormProps {
@@ -33,7 +34,6 @@ export const CreateForm: FC<FormProps> = ({ createTask }) => {
 
   return (
     <Wrapper>
-      <form action="">
         <Input
           required
           placeholder="Title for the task"
@@ -55,7 +55,6 @@ export const CreateForm: FC<FormProps> = ({ createTask }) => {
           value={data.date}
           handleChange={patchData('date')}
         />
-      </form>
 
       <StyledButton
         onClick={() => createTask(data.title, data.description, data.date)}
