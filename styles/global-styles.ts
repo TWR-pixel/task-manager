@@ -12,6 +12,8 @@ export const GlobalStyles = createGlobalStyle`
     width: 100%;
     margin: 0;
 
+    background-color: #000;
+
     * {
       margin: 0;
       padding: 0;

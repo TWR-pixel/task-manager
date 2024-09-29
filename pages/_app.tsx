@@ -1,99 +1,204 @@
 import { AppProps } from 'next/app';
-import { createContext, Dispatch, SetStateAction, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { CreateForm } from '../src/components/form/create';
+
 import { Tabs } from '../src/components/tabs';
-import { FormsContext, IFormsContext } from '../src/modules/forms/context';
-import { initialRequestData } from '../src/modules/forms/shapes/request';
-import { EditTaskModal } from '../src/modules/modal/components/editTask';
-import { TaskModal } from '../src/modules/modal/components/task';
-import { IModalsContext, ModalsContext } from '../src/modules/modal/context';
+import { Task } from '../src/interfaces/interfaces';
+
 import { GlobalStyles } from '../styles/global-styles';
 
-export const TasksContext = createContext<
-  [Task[], Dispatch<SetStateAction<Task[]>>]
->([[], () => {}]);
-
-export type CreateTask = (
-  title: string,
-  description: string,
-  date: string
-) => void;
+import { ModalComponent } from '../src/components/modal';
+import AddTaskButton from '../src/components/buttons';
 
 const Wrapper = styled.div`
   height: 100vh;
   padding: 20px 40px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-
-  background-color: #3a004f;
+  justify-content: space-between;
+  background-color: #020202;
 `;
 
-export interface Task {
-  id: number;
-  title: string;
-  description: string;
-  date: string;
-  done: boolean;
-  delete: boolean;
+const StButton = styled.button`
+  display: flex;
+  font-size: 30px;
+
+  color: #00d0ff;
+
+  padding: 10px;
+
+  border-radius: 8px;
+  border: none;
+
+  background-color: transparent;
+`;
+
+const TasksBlock = styled.div`
+  height: calc(100vh - 100px); // Учитываем высоту кнопки и отступы
+  overflow-y: auto; // Включаем прокрутку только для задач
+  padding-right: 10px;
+`;
+
+// Интерфейс для контекста модального окна
+interface ModalsContextInterface {
+  isModalOpen: boolean;
+  modalMode: 'view' | 'edit' | 'add' | 'confirmDelete'; // Добавлен новый режим
+  openModal: (
+    mode: 'view' | 'edit' | 'add' | 'confirmDelete',
+    task?: Task | null,
+    onConfirm?: (id: string) => void
+  ) => void;
+  closeModal: () => void;
+  editingTask: Task | null;
+  confirmDeleteTaskId: string | null; // Добавляем ID для подтверждения удаления
 }
 
-export const initTasks = [
+// Создаем контекст для управления модальным окном
+export const ModalsContext = createContext<ModalsContextInterface>({
+  isModalOpen: false,
+  modalMode: 'add',
+  openModal: () => {},
+  closeModal: () => {},
+  editingTask: null,
+  confirmDeleteTaskId: null,
+});
 
-];
+interface TasksContextInterface {
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  handleToggleTask: (id: string) => void;
+  handleDeleteTask: (id: string) => void;
+  handleAddOrUpdateTask: (newTask: Task) => void;
+}
+
+export const TasksContext = createContext<TasksContextInterface>({
+  tasks: [],
+  setTasks: () => {},
+  handleToggleTask: () => {},
+  handleDeleteTask: () => {},
+  handleAddOrUpdateTask: () => {},
+});
 
 function CustomApp({ Component, pageProps }: AppProps) {
-  const modals: IModalsContext = {
-    task: useState(false),
-    edit: useState(false),
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<
+    'view' | 'edit' | 'add' | 'confirmDelete'
+  >('add');
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [confirmDeleteTaskId, setConfirmDeleteTaskId] = useState<string | null>(
+    null
+  );
+
+  // Загрузка задач из localStorage
+  useEffect(() => {
+    loadTasksFromLocalStorage();
+  }, []);
+
+  // Сохранение задач в localStorage при их изменении
+  useEffect(() => {
+    saveTasksToLocalStorage(tasks);
+  }, [tasks]);
+
+  // Загрузка задач из localStorage только один раз при первой загрузке
+  const loadTasksFromLocalStorage = () => {
+    const savedTasks = localStorage.getItem('tasks');
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    }
   };
 
-  const tasks = useState<Task[]>(initTasks);
-
-  const forms: IFormsContext = {
-    request: useState(initialRequestData),
-    edit: useState(initialRequestData),
+  // Сохранение задач в localStorage при их изменении
+  const saveTasksToLocalStorage = (tasks: Task[]) => {
+    if (tasks.length > 0) {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
   };
 
-  const [newTask, setNewTask] = useState('');
+  const openModal = (
+   mode: 'view' | 'edit' | 'add' | 'confirmDelete',
+   task?: Task | null,
+   onConfirm?: (id: string) => void
+ ) => {
+   setModalMode(mode);
+   setEditingTask(task || null);
+   setIsModalOpen(true);
+   if (mode === 'confirmDelete' && task) {
+     setConfirmDeleteTaskId(task.id); // Устанавливаем ID задачи для удаления
+   }
+ };
 
-  const createTask: CreateTask = (title, description, date) => {
-    tasks[1]([
-      ...tasks[0],
-      {
-        id: tasks.length + 1,
-        title,
-        description,
-        date,
-        done: false,
-        delete: false,
-      },
-    ]);
-    setNewTask('');
+  // Функция для закрытия модального окна
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalMode('add');
+    setEditingTask(null);
+    setConfirmDeleteTaskId(null); // Сбрасываем ID при закрытии
+  };
+
+  //функция для переключения статуса задач
+  const handleToggleTask = (id: string) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
+
+  const handleDeleteTask = (id: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    closeModal();
+  };
+
+  // Функция для добавления или обновления задачи
+  const handleAddOrUpdateTask = (newTask: Task) => {
+    if (modalMode === 'edit' && editingTask) {
+      setTasks((prevTasks) =>
+        prevTasks.map((task) => (task.id === editingTask.id ? newTask : task))
+      );
+    } else {
+      const taskExists = tasks.some((task) => task.id === newTask.id);
+      if (!taskExists) {
+        setTasks((prevTasks) => [...prevTasks, newTask]);
+      }
+    }
+    closeModal();
   };
 
   return (
-    <>
-      <TasksContext.Provider value={tasks}>
-        <ModalsContext.Provider value={modals}>
-          <FormsContext.Provider value={forms}>
-            <GlobalStyles />
-            <Wrapper>
-              <Tabs />
+    <TasksContext.Provider
+      value={{
+        tasks,
+        setTasks,
+        handleToggleTask,
+        handleDeleteTask,
+        handleAddOrUpdateTask,
+      }}
+    >
+      <ModalsContext.Provider
+        value={{
+          isModalOpen,
+          modalMode,
+          openModal,
+          closeModal,
+          editingTask,
+          confirmDeleteTaskId,
+        }}
+      >
+        <GlobalStyles />
+        <Wrapper>
+          <div>
+            <Tabs />
 
-              <Component {...pageProps} />
-
-              <EditTaskModal tasks={tasks} />
-
-              <TaskModal tasks={tasks} />
-
-              <CreateForm createTask={createTask} />
-            </Wrapper>
-          </FormsContext.Provider>
-        </ModalsContext.Provider>
-      </TasksContext.Provider>
-    </>
+            <Component {...pageProps} />
+          </div>
+          <div>
+            <AddTaskButton onClick={() => openModal('add')} />
+          </div>
+          <ModalComponent />
+        </Wrapper>
+      </ModalsContext.Provider>
+    </TasksContext.Provider>
   );
 }
 

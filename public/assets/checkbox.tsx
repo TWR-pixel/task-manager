@@ -1,44 +1,37 @@
 import { ComponentProps, FC } from 'react';
+import styled from 'styled-components';
 
 interface ICheckboxProps extends ComponentProps<'svg'> {}
 
-export const Checkbox: FC<ICheckboxProps> = (props) => (
+const Checkbox: FC<ICheckboxProps> = (props) => (
   <svg
-    version="1.0"
-    xmlns="http://www.w3.org/2000/svg"
-    width="1250.000000pt"
-    height="1250.000000pt"
-    viewBox="0 0 1250.000000 1250.000000"
-    preserveAspectRatio="xMidYMid meet"
+    fill="#ffffff"
+    width="64px"
+    height="64px"
+    viewBox="0 0 128.00 128.00"
+    version="1.1"
+    stroke="#ffffff"
+    strokeWidth="0.00128"
     {...props}
   >
+    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
     <g
-      transform="translate(0.000000,1250.000000) scale(0.100000,-0.100000)"
-      fill="#ffffff"
-      stroke="none"
-    >
-      <path
-        d="M4355 8774 c-167 -20 -243 -44 -347 -111 -127 -82 -237 -237 -259
--363 -29 -160 -30 -243 -27 -2095 4 -2118 -1 -1971 72 -2131 60 -129 192 -249
-331 -301 132 -49 29 -46 2129 -50 1740 -3 1963 -2 1992 12 18 8 41 15 53 15
-26 0 142 54 198 91 134 92 235 250 264 414 12 67 14 397 14 2005 0 2166 6
-1999 -76 2169 -56 115 -161 221 -273 276 -153 73 2 68 -2126 70 -1053 1 -1928
-1 -1945 -1z m3835 -517 c20 -7 44 -27 57 -46 l23 -34 -2 -1931 c-3 -2114 1
--1976 -62 -1995 -101 -31 -179 -32 -2016 -29 l-1845 3 -46 21 c-33 16 -50 32
--60 55 -12 29 -14 321 -14 1956 l0 1922 21 27 c11 16 34 36 50 45 27 16 154
-18 1944 18 1458 0 1923 -3 1950 -12z"
-      />
-      <path
-        d="M7410 7318 c-39 -11 -94 -51 -161 -118 -25 -25 -162 -157 -305 -295
--142 -137 -312 -302 -378 -365 -65 -63 -140 -135 -166 -160 -25 -25 -114 -110
--196 -190 -403 -391 -423 -410 -446 -410 -22 1 -102 69 -383 324 -49 44 -110
-99 -134 121 -25 22 -57 50 -70 62 -14 12 -38 25 -53 28 -15 4 -30 11 -33 16
--4 5 -36 9 -73 9 -121 0 -209 -73 -238 -198 -21 -89 -2 -153 66 -222 63 -64
-130 -126 250 -231 47 -41 92 -81 100 -89 20 -19 169 -153 290 -262 131 -116
-173 -145 234 -159 95 -21 176 11 272 106 17 16 145 140 285 275 140 135 308
-297 374 360 111 107 210 203 603 586 79 76 147 141 152 144 20 12 280 272 298
-297 34 49 46 126 32 195 -29 134 -178 217 -320 176z"
-      />
+      id="SVGRepo_tracerCarrier"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    ></g>
+    <g id="SVGRepo_iconCarrier">
+      <g>
+        <polygon points="59.2,78.3 40.2,59.3 34.5,64.9 59.2,89.6 98,50.8 92.3,45.1 "></polygon>
+        <path d="M1,127h126V1H1V127z M9,9h110v110H9V9z"></path>
+      </g>
     </g>
   </svg>
 );
+
+export const StCheckbox = styled(Checkbox)`
+  width: 20px;
+  height: 20px;
+  
+  cursor: pointer;
+`;

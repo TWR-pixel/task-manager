@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
 const List = styled.ul`
   display: flex;
@@ -8,32 +10,46 @@ const List = styled.ul`
   justify-content: space-around;
 
   list-style: none;
-
-  color: #ffffff;
 `;
 
-const StyledLink = styled(Link)`
-  padding: 2px 4px;
+const StLink = styled(Link)<{ isActive: boolean }>`
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   gap: 15px;
 
+  color: #ffffff;
+
   text-decoration: none;
 
-  &:hover {
-    color: yellow;
-    transition: 0.2s;
-    border-radius: 5px;
+  :focus {
+    border: none;
+    outline: none;
   }
 `;
 
 export const Tabs = () => {
+  const router = useRouter();
+
   return (
     <List>
-      <StyledLink href={'/all'}>All</StyledLink>
-      <StyledLink href={'/todo'}>To Do</StyledLink>
-      <StyledLink href={'/done'}>Done</StyledLink>
-      <StyledLink href={'/delete'}>Delete</StyledLink>
+      <motion.div whileHover={{ scale: 1.3 }}>
+        <StLink href="/all" passHref isActive={router.pathname === '/all'}>
+          Все
+        </StLink>
+      </motion.div>
+
+      <motion.div whileHover={{ scale: 1.3 }}>
+        <StLink href="/todo" passHref isActive={router.pathname === '/todo'}>
+          В планах 
+        </StLink>
+      </motion.div>
+
+      <motion.div whileHover={{ scale: 1.3 }}>
+        <StLink href="/done" passHref isActive={router.pathname === '/done'}>
+          Завершено
+        </StLink>
+      </motion.div>
     </List>
   );
 };
