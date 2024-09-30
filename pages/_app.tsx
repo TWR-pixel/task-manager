@@ -92,41 +92,37 @@ function CustomApp({ Component, pageProps }: AppProps) {
 
   // Загрузка задач из localStorage
   useEffect(() => {
+    const loadTasksFromLocalStorage = () => {
+      const savedTasks = localStorage.getItem('tasks');
+      if (savedTasks) {
+        setTasks(JSON.parse(savedTasks));
+      }
+    };
     loadTasksFromLocalStorage();
   }, []);
 
   // Сохранение задач в localStorage при их изменении
   useEffect(() => {
+    const saveTasksToLocalStorage = (tasks: Task[]) => {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    };
     saveTasksToLocalStorage(tasks);
   }, [tasks]);
 
   // Загрузка задач из localStorage только один раз при первой загрузке
-  const loadTasksFromLocalStorage = () => {
-    const savedTasks = localStorage.getItem('tasks');
-    if (savedTasks) {
-      setTasks(JSON.parse(savedTasks));
-    }
-  };
-
-  // Сохранение задач в localStorage при их изменении
-  const saveTasksToLocalStorage = (tasks: Task[]) => {
-    if (tasks.length > 0) {
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
-  };
 
   const openModal = (
-   mode: 'view' | 'edit' | 'add' | 'confirmDelete',
-   task?: Task | null,
-   onConfirm?: (id: string) => void
- ) => {
-   setModalMode(mode);
-   setEditingTask(task || null);
-   setIsModalOpen(true);
-   if (mode === 'confirmDelete' && task) {
-     setConfirmDeleteTaskId(task.id); // Устанавливаем ID задачи для удаления
-   }
- };
+    mode: 'view' | 'edit' | 'add' | 'confirmDelete',
+    task?: Task | null,
+    onConfirm?: (id: string) => void
+  ) => {
+    setModalMode(mode);
+    setEditingTask(task || null);
+    setIsModalOpen(true);
+    if (mode === 'confirmDelete' && task) {
+      setConfirmDeleteTaskId(task.id); // Устанавливаем ID задачи для удаления
+    }
+  };
 
   // Функция для закрытия модального окна
   const closeModal = () => {
@@ -152,16 +148,29 @@ function CustomApp({ Component, pageProps }: AppProps) {
 
   // Функция для добавления или обновления задачи
   const handleAddOrUpdateTask = (newTask: Task) => {
-    if (modalMode === 'edit' && editingTask) {
-      setTasks((prevTasks) =>
-        prevTasks.map((task) => (task.id === editingTask.id ? newTask : task))
-      );
-    } else {
-      const taskExists = tasks.some((task) => task.id === newTask.id);
-      if (!taskExists) {
-        setTasks((prevTasks) => [...prevTasks, newTask]);
+    setTasks((prevTasks) => {
+      if (modalMode === 'edit' && editingTask) {
+        // Находим индекс задачи которую хотим обновить
+        const taskIndex = prevTasks.findIndex(
+          (task) => task.id === editingTask.id
+        );
+
+        if (taskIndex !== -1) {
+          // клонируем массив задач и обновляем конкретную задачу
+          const updatedTasks = [...prevTasks];
+          updatedTasks[taskIndex] = newTask;
+          return updatedTasks;
+        }
+        return prevTasks;
+      } else {
+        const taskExists = prevTasks.some((task) => task.id === newTask.id);
+        if (!taskExists) {
+          return [...prevTasks, newTask];
+        }
+        return prevTasks;
       }
-    }
+    });
+
     closeModal();
   };
 

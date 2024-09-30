@@ -94,7 +94,7 @@ export const TaskForm: FC<TaskFormProps> = ({ onAdd, editingTask }) => {
     e.preventDefault();
     if (taskTitle.trim() !== '' && taskDescription.trim() !== '') {
       const newTask: Task = {
-        id: editingTask ? editingTask.id : uuidv4(), // Используйте uuid для новых задач
+        id: editingTask ? editingTask.id : uuidv4(), 
         title: taskTitle,
         description: taskDescription,
         completed: false,

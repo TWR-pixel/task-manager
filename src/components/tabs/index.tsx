@@ -12,7 +12,7 @@ const List = styled.ul`
   list-style: none;
 `;
 
-const StLink = styled(Link)<{ isActive: boolean }>`
+const StLink = styled(Link)<{ $isActive: boolean }>`
   padding: 10px 14px;
   display: flex;
   align-items: center;
@@ -34,19 +34,19 @@ export const Tabs = () => {
   return (
     <List>
       <motion.div whileHover={{ scale: 1.3 }}>
-        <StLink href="/all" passHref isActive={router.pathname === '/all'}>
+        <StLink href="/all" passHref $isActive={router.pathname === '/all'}>
           Все
         </StLink>
       </motion.div>
 
       <motion.div whileHover={{ scale: 1.3 }}>
-        <StLink href="/todo" passHref isActive={router.pathname === '/todo'}>
-          В планах 
+        <StLink href="/todo" passHref $isActive={router.pathname === '/todo'}>
+          В планах
         </StLink>
       </motion.div>
 
       <motion.div whileHover={{ scale: 1.3 }}>
-        <StLink href="/done" passHref isActive={router.pathname === '/done'}>
+        <StLink href="/done" passHref $isActive={router.pathname === '/done'}>
           Завершено
         </StLink>
       </motion.div>

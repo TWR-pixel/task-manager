@@ -16,8 +16,7 @@ const Wrapper = styled.div`
 
 export const TaskList: FC = () => {
   const router = useRouter();
-  const { tasks, handleToggleTask } =
-    useContext(TasksContext);
+  const { tasks, handleToggleTask } = useContext(TasksContext);
   const { openModal } = useContext(ModalsContext);
 
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
@@ -54,8 +53,8 @@ export const TaskList: FC = () => {
   };
 
   const handleDeleteTaskRequest = (id: string) => {
-   openModal('confirmDelete', { id } as Task); // Передаем только id в openModal
- };
+    openModal('confirmDelete', { id } as Task); // Передаем только id в openModal
+  };
 
   return (
     <Wrapper>
