@@ -1,12 +1,11 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { FC, useContext } from 'react';
 import styled from 'styled-components';
-
-import { TaskItem } from '../taskItem';
 
 import { Task } from '../../interfaces/interfaces';
 
-import { ModalsContext, TasksContext } from '../../../pages/_app';
+import { ModalsContext } from '../../../pages/_app';
+
+import { TaskItem } from '../taskItem';
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,35 +13,12 @@ const Wrapper = styled.div`
   gap: 20px;
 `;
 
-export const TaskList: FC = () => {
-  const router = useRouter();
-  const { tasks, handleToggleTask } = useContext(TasksContext);
+interface TaskListInterface {
+
+  tasks: Task[];
+}
+const TaskList: FC<TaskListInterface> = ({ tasks }) => {
   const { openModal } = useContext(ModalsContext);
-
-  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
-
-  // Фильтрация задач в зависимости от текущего маршрута
-  useEffect(() => {
-    const path = router.pathname;
-
-    const filterTasks = (condition: (task: Task) => boolean) => {
-      setFilteredTasks(tasks.filter(condition));
-    };
-
-    switch (path) {
-      case '/all':
-        filterTasks((task) => !task.deleted);
-        break;
-      case '/todo':
-        filterTasks((task) => !task.completed && !task.deleted);
-        break;
-      case '/done':
-        filterTasks((task) => task.completed && !task.deleted);
-        break;
-      default:
-        filterTasks(() => true);
-    }
-  }, [router.pathname, tasks]);
 
   const handleEditTask = (task: Task) => {
     openModal('edit', task);
@@ -53,21 +29,27 @@ export const TaskList: FC = () => {
   };
 
   const handleDeleteTaskRequest = (id: string) => {
-    openModal('confirmDelete', { id } as Task); // Передаем только id в openModal
+    openModal('confirmDelete', { id } as Task);
   };
 
   return (
     <Wrapper>
-      {filteredTasks.map((task) => (
-        <TaskItem
-          key={task.id}
-          task={task}
-          onToggle={handleToggleTask}
-          onDelete={handleDeleteTaskRequest}
-          onEdit={handleEditTask}
-          onView={handleViewTask}
-        />
-      ))}
+      {tasks.length > 0 ? (
+        tasks.map((task, index) => (
+          <TaskItem
+            key={task.id}
+            task={task}
+            index={index} // Передаем индекс для перетаскивания
+            onDelete={handleDeleteTaskRequest}
+            onEdit={handleEditTask}
+            onView={handleViewTask}
+          />
+        ))
+      ) : (
+        <p>Нет задач для отображения.</p>
+      )}
     </Wrapper>
   );
 };
+
+export default TaskList;

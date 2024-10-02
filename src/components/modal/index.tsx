@@ -1,6 +1,7 @@
 import { FC, useContext } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { ModalsContext, TasksContext } from '../../../pages/_app';
+import { ModalsContext } from '../../../pages/_app';
 
 import { Modal } from '../../modules/modal';
 
@@ -8,6 +9,8 @@ import { ViewModal } from './view';
 import { EditingModal } from './editing';
 import { DeleteModal } from './delete';
 import { AddModal } from './add';
+
+import { deleteTask } from '../../../store/taskSlice';
 
 export const ModalComponent: FC = () => {
   const {
@@ -18,11 +21,11 @@ export const ModalComponent: FC = () => {
     confirmDeleteTaskId,
   } = useContext(ModalsContext);
 
-  const { handleDeleteTask } = useContext(TasksContext);
+  const dispatch = useDispatch();
 
   const confirmDeleteTask = () => {
     if (confirmDeleteTaskId) {
-      handleDeleteTask(confirmDeleteTaskId); // Удаляем задачу по ID
+      dispatch(deleteTask(confirmDeleteTaskId)); // Удаляем задачу по ID
       closeModal();
     }
   };

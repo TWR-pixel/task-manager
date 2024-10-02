@@ -4,5 +4,5 @@ export interface Task {
   description: string;
   completed: boolean;
   deleted: boolean;
-  date?: string;
+  inProgress?: boolean;
 }

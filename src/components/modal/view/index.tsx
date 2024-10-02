@@ -7,6 +7,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   height: 100%;
 
   strong {
@@ -22,18 +23,16 @@ const StBlock = styled.div`
 
 const FirstTitle = styled.h1`
   font-size: 40px;
+
   text-align: center;
+
   color: #ffffff;
 `;
 
 const Text = styled.p`
   font-size: 30px;
-  color: #ffffffe1;
-`;
 
-const DateText = styled.p`
-  font-size: 26px;
-  color: #ffffff;
+  color: #ffffffe1;
 `;
 
 interface ViewModalInterface {
@@ -49,9 +48,6 @@ export const ViewModal: FC<ViewModalInterface> = ({ editingTask }) => {
           <strong>Описание:</strong> {editingTask.description}
         </Text>
       </StBlock>
-      <DateText>
-        <strong>Дата выполнения:</strong> {editingTask.date || 'Нет даты'}
-      </DateText>
     </Wrapper>
   );
 };

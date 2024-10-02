@@ -1,32 +1,29 @@
 import { FC, FormEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+
 import { Task } from '../../interfaces/interfaces';
 
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   height: 100%;
 `;
 
 const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   gap: 60px;
-  flex-direction: column;
-`;
-
-const Title = styled.h1`
-  text-align: center;
-  font-size: 20px;
-  color: #ffffff50;
 `;
 
 const StyledInputBlock = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
+
   padding: 2px;
 `;
 
@@ -50,6 +47,7 @@ const Input = styled.input`
 
   &:focus {
     color: #ffffffaa;
+
     outline: none;
     border: 1px solid #00d0ff;
   }
@@ -73,20 +71,14 @@ interface TaskFormProps {
   editingTask?: Task | null;
 }
 
-const getCurrentDate = () => {
-  return new Date().toISOString().split('T')[0]; // Берем дату без времени
-};
-
 export const TaskForm: FC<TaskFormProps> = ({ onAdd, editingTask }) => {
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
-  const [date, setDate] = useState<string>(getCurrentDate());
 
   useEffect(() => {
     if (editingTask) {
       setTaskTitle(editingTask.title);
       setTaskDescription(editingTask.description);
-      setDate(editingTask.date || getCurrentDate());
     }
   }, [editingTask]);
 
@@ -94,12 +86,11 @@ export const TaskForm: FC<TaskFormProps> = ({ onAdd, editingTask }) => {
     e.preventDefault();
     if (taskTitle.trim() !== '' && taskDescription.trim() !== '') {
       const newTask: Task = {
-        id: editingTask ? editingTask.id : uuidv4(), 
+        id: editingTask ? editingTask.id : uuidv4(),
         title: taskTitle,
         description: taskDescription,
         completed: false,
         deleted: false,
-        date: date, // Добавляем дату
       };
       onAdd(newTask);
     }
@@ -124,15 +115,6 @@ export const TaskForm: FC<TaskFormProps> = ({ onAdd, editingTask }) => {
             value={taskDescription}
             placeholder="Описание"
             onChange={(e) => setTaskDescription(e.target.value)}
-          />
-        </StyledInputBlock>
-        <StyledInputBlock>
-          <Label>Дата выполнения</Label>
-          <Input
-            type="date" // Поле для ввода даты'
-            min={getCurrentDate()}
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
           />
         </StyledInputBlock>
       </Wrapper>

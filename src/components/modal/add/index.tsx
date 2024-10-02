@@ -1,14 +1,20 @@
-import {  useContext } from 'react';
-
+import { useContext } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import { ModalsContext } from '../../../../pages/_app';
+
+import { Task } from '../../../interfaces/interfaces';
+
 import { TaskForm } from '../../taskForm';
-import { TasksContext } from '../../../../pages/_app';
+
+import { addTask } from '../../../../store/taskSlice';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   height: 100%;
 
   strong {
@@ -16,24 +22,25 @@ const Wrapper = styled.div`
   }
 `;
 
-const StBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-`;
-
 const SecondTitle = styled.h2`
   text-align: center;
+  
   color: #84848480;
 `;
 
 export const AddModal = () => {
-  const { handleAddOrUpdateTask } = useContext(TasksContext);
+  const { closeModal } = useContext(ModalsContext);
+  const dispatch = useDispatch();
 
+  // Обработчик добавления задачи
+  const handleAddTask = (task: Task) => {
+    dispatch(addTask(task)); // Диспетчеризуем экшен добавления задачи
+    closeModal();
+  };
   return (
     <Wrapper>
       <SecondTitle>Новый список</SecondTitle>
-      <TaskForm onAdd={handleAddOrUpdateTask} />
+      <TaskForm onAdd={handleAddTask} />
     </Wrapper>
   );
 };

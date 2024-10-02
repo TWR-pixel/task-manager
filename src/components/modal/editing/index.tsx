@@ -1,13 +1,20 @@
-import styled from 'styled-components';
-import { Task } from '../../../interfaces/interfaces';
 import { FC, useContext } from 'react';
+import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
+
+import { ModalsContext } from '../../../../pages/_app';
+
+import { Task } from '../../../interfaces/interfaces';
+
 import { TaskForm } from '../../taskForm';
-import { TasksContext } from '../../../../pages/_app';
+
+import { updateTask } from '../../../../store/taskSlice';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   height: 100%;
 
   strong {
@@ -17,6 +24,7 @@ const Wrapper = styled.div`
 
 const SecondTitle = styled.h2`
   text-align: center;
+
   color: #84848480;
 `;
 
@@ -24,11 +32,14 @@ interface EditingModalInterface {
   editingTask: Task;
 }
 
-export const EditingModal: FC<EditingModalInterface> = ({
-  editingTask,
-}) => {
-  const { handleAddOrUpdateTask } = useContext(TasksContext);
-  
+export const EditingModal: FC<EditingModalInterface> = ({ editingTask }) => {
+  const { closeModal } = useContext(ModalsContext);
+  const dispatch = useDispatch();
+
+  const handleAddOrUpdateTask = (task: Task) => {
+    dispatch(updateTask(task)); // Диспетчеризуем экшен обновления задачи
+    closeModal();
+  };
   return (
     <Wrapper>
       <SecondTitle>Редактирование</SecondTitle>

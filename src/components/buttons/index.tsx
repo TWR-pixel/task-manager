@@ -3,12 +3,15 @@ import styled from 'styled-components';
 
 const StButton = styled.button`
   display: flex;
+
   font-size: 30px;
-  color: #00d0ff;
   padding: 10px;
+
+  color: #ff9d00;
+  background-color: transparent;
+
   border-radius: 8px;
   border: none;
-  background-color: transparent;
 `;
 
 interface AddTaskButtonInterface {

@@ -1,12 +1,15 @@
-import styled from 'styled-components';
-import { ModalsContext } from '../../../../pages/_app';
 import { FC, useContext } from 'react';
+import styled from 'styled-components';
+
+import { ModalsContext } from '../../../../pages/_app';
+
 import { Task } from '../../../interfaces/interfaces';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   height: 100%;
 
   strong {
@@ -16,6 +19,7 @@ const Wrapper = styled.div`
 
 const SecondTitle = styled.h2`
   text-align: center;
+
   color: #84848480;
 `;
 

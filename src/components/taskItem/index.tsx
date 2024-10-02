@@ -1,21 +1,12 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
+
+import { Task } from '../../interfaces/interfaces';
 
 import { List } from '../../../styles/styles';
 
-import { StDeleteIcon } from '../../../public/assets/delete';
-
-import { Task } from '../../interfaces/interfaces';
 import { StEditIcon } from '../../../public/assets/edit';
-import { StClearCheckbox } from '../../../public/assets/clearCheckbox';
-import { StCheckbox } from '../../../public/assets/checkbox';
-
-const StButton = styled.button`
-  background-color: transparent;
-  width: 20px;
-  height: 20px;
-  border: none;
-`;
+import { StDeleteIcon } from '../../../public/assets/delete';
 
 const Wrapper = styled.div`
   display: flex;
@@ -33,15 +24,14 @@ const TaskBlock = styled.div`
 
 interface TaskItemProps {
   task: Task;
-  onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit: (task: Task) => void;
   onView: (task: Task) => void;
+  index: number;
 }
 
 export const TaskItem: FC<TaskItemProps> = ({
   task,
-  onToggle,
   onDelete,
   onEdit,
   onView,
@@ -52,14 +42,20 @@ export const TaskItem: FC<TaskItemProps> = ({
         <h1>{task.title}</h1>
       </TaskBlock>
       <Wrapper>
-        <StEditIcon onClick={() => onEdit(task)}>Редактировать</StEditIcon>
-        {task.completed ? (
-          <StCheckbox onClick={() => onToggle(task.id)} />
-        ) : (
-          <StClearCheckbox onClick={() => onToggle(task.id)} />
-        )}
-
-        <StDeleteIcon onClick={() => onDelete(task.id)} />
+        <StEditIcon
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(task);
+          }}
+        >
+          Редактировать
+        </StEditIcon>
+        <StDeleteIcon
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(task.id);
+          }}
+        />
       </Wrapper>
     </List>
   );
