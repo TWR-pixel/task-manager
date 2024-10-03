@@ -7,6 +7,23 @@ import { List } from '../../../styles/styles';
 
 import { StEditIcon } from '../../../public/assets/edit';
 import { StDeleteIcon } from '../../../public/assets/delete';
+import { useDrag } from 'react-dnd';
+
+const StList = styled(List)`
+  border-radius: 6px;
+  outline: none;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  transition: background-color 0.3s ease, transform 0.2s ease; 
+  &:hover {
+    background-color: #4d380085; 
+    transform: scale(1.02); 
+  }
+
+  &:active {
+    transform: scale(0.98); 
+  }
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -15,6 +32,7 @@ const Wrapper = styled.div`
 `;
 
 const TaskBlock = styled.div`
+  padding: 4px 8px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -35,9 +53,18 @@ export const TaskItem: FC<TaskItemProps> = ({
   onDelete,
   onEdit,
   onView,
+  index,
 }) => {
+  const [{ isDragging }, drag] = useDrag({
+    type: 'TASK',
+    item: { id: task.id, column: task.column },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
   return (
-    <List>
+    <StList ref={drag}>
       <TaskBlock onClick={() => onView(task)}>
         <h1>{task.title}</h1>
       </TaskBlock>
@@ -57,6 +84,6 @@ export const TaskItem: FC<TaskItemProps> = ({
           }}
         />
       </Wrapper>
-    </List>
+    </StList>
   );
 };

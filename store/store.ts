@@ -4,7 +4,7 @@ import tasksReducer from './taskSlice';
 
 const store = configureStore({
   reducer: {
-    tasks: tasksReducer, // Подключаем редьюсер
+    tasks: tasksReducer,
   },
 });
 

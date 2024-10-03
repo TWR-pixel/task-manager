@@ -14,9 +14,9 @@ const Wrapper = styled.div`
 `;
 
 interface TaskListInterface {
-
   tasks: Task[];
 }
+
 const TaskList: FC<TaskListInterface> = ({ tasks }) => {
   const { openModal } = useContext(ModalsContext);
 

@@ -24,7 +24,7 @@ const Wrapper = styled.div`
 
 const SecondTitle = styled.h2`
   text-align: center;
-  
+
   color: #84848480;
 `;
 

@@ -91,6 +91,7 @@ export const TaskForm: FC<TaskFormProps> = ({ onAdd, editingTask }) => {
         description: taskDescription,
         completed: false,
         deleted: false,
+        column: 'todo',
       };
       onAdd(newTask);
     }

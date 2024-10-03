@@ -4,6 +4,8 @@ import { Board } from '../../src/components/board';
 import AddTaskButton from '../../src/components/buttons';
 import { ModalsContext } from '../_app';
 import styled from 'styled-components';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -18,9 +20,9 @@ const AllPage = () => {
 
   return (
     <Wrapper>
-      <div>
-        <Board />;
-      </div>
+      <DndProvider backend={HTML5Backend}>
+        <Board />
+      </DndProvider>
       <div>
         <AddTaskButton onClick={() => openModal('add')} />
       </div>

@@ -5,4 +5,5 @@ export interface Task {
   completed: boolean;
   deleted: boolean;
   inProgress?: boolean;
+  column: string;
 }
