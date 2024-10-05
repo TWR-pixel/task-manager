@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { ModalsContext } from '../../../../pages/_app';
 
-import { Task } from '../../../interfaces/interfaces';
+import { Task } from '../../../../store/taskSlice';
 
 const Wrapper = styled.div`
   display: flex;

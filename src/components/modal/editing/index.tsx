@@ -4,11 +4,9 @@ import styled from 'styled-components';
 
 import { ModalsContext } from '../../../../pages/_app';
 
-import { Task } from '../../../interfaces/interfaces';
-
 import { TaskForm } from '../../taskForm';
 
-import { updateTask } from '../../../../store/taskSlice';
+import { Task, updateTask } from '../../../../store/taskSlice';
 
 const Wrapper = styled.div`
   display: flex;

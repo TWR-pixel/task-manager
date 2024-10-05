@@ -1,15 +1,13 @@
 import { ComponentProps, FC } from 'react';
 import styled from 'styled-components';
 
-interface IAddColumnProps extends ComponentProps<'svg'> {}
+interface IDeleteColumn extends ComponentProps<'svg'> {}
 
-const AddColumnIcon: FC<IAddColumnProps> = (props) => (
+const DeleteColumn: FC<IDeleteColumn> = (props) => (
   <svg
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    width="40"
-    height="40"
     {...props}
   >
     <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -20,7 +18,7 @@ const AddColumnIcon: FC<IAddColumnProps> = (props) => (
     ></g>
     <g id="SVGRepo_iconCarrier">
       <path
-        d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15"
+        d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5"
         strokeWidth="1.5"
         strokeLinecap="round"
       ></path>
@@ -33,9 +31,14 @@ const AddColumnIcon: FC<IAddColumnProps> = (props) => (
   </svg>
 );
 
-export const StAddColumn = styled(AddColumnIcon)`
-  min-width: 40px;
-  height: 40px;
+export const StDeleteColumn = styled(DeleteColumn)`
+  position: absolute;
+  top: 2px;
+  right: 2px;
+
+  width: 26px;
+  height: 26px;
 
   stroke: #ff9d00;
+  cursor: pointer;
 `;

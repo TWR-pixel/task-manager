@@ -1,27 +1,27 @@
 import { FC } from 'react';
+import { useDrag } from 'react-dnd';
 import styled from 'styled-components';
-
-import { Task } from '../../interfaces/interfaces';
 
 import { List } from '../../../styles/styles';
 
 import { StEditIcon } from '../../../public/assets/edit';
 import { StDeleteIcon } from '../../../public/assets/delete';
-import { useDrag } from 'react-dnd';
+
+import { Task } from '../../../store/taskSlice';
 
 const StList = styled(List)`
   border-radius: 6px;
   outline: none;
   padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-  transition: background-color 0.3s ease, transform 0.2s ease; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
   &:hover {
-    background-color: #4d380085; 
-    transform: scale(1.02); 
+    background-color: #4d380085;
+    transform: scale(1.02);
   }
 
   &:active {
-    transform: scale(0.98); 
+    transform: scale(0.98);
   }
 `;
 
@@ -32,12 +32,20 @@ const Wrapper = styled.div`
 `;
 
 const TaskBlock = styled.div`
-  padding: 4px 8px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+
+  max-width: 300px;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 
   cursor: pointer;
+`;
+
+const Title = styled.h1`
+  font-size: 26px;
 `;
 
 interface TaskItemProps {
@@ -45,7 +53,6 @@ interface TaskItemProps {
   onDelete: (id: string) => void;
   onEdit: (task: Task) => void;
   onView: (task: Task) => void;
-  index: number;
 }
 
 export const TaskItem: FC<TaskItemProps> = ({
@@ -53,9 +60,8 @@ export const TaskItem: FC<TaskItemProps> = ({
   onDelete,
   onEdit,
   onView,
-  index,
 }) => {
-  const [{ isDragging }, drag] = useDrag({
+  const [{}, drag] = useDrag({
     type: 'TASK',
     item: { id: task.id, column: task.column },
     collect: (monitor) => ({
@@ -66,7 +72,7 @@ export const TaskItem: FC<TaskItemProps> = ({
   return (
     <StList ref={drag}>
       <TaskBlock onClick={() => onView(task)}>
-        <h1>{task.title}</h1>
+        <Title>{task.title}</Title>
       </TaskBlock>
       <Wrapper>
         <StEditIcon

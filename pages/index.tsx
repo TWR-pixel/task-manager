@@ -1,7 +1,7 @@
 import Head from 'next/head';
+import Link from 'next/link';
 
 import styled from 'styled-components';
-import Link from 'next/link';
 
 const Wrapper = styled.div`
   display: flex;
@@ -9,6 +9,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 20px;
+
   height: 100vh;
 `;
 
@@ -33,8 +34,8 @@ const StLink = styled(Link)`
   transition: transform 0.3s ease, background-color 0.3s ease;
 
   &:hover {
-    transform: scale(1.1); 
-    background-color: #a5660055; 
+    transform: scale(1.1);
+    background-color: #a5660055;
   }
 `;
 

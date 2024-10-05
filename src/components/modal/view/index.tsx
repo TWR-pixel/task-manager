@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
-import { Task } from '../../../interfaces/interfaces';
+import { Task } from '../../../../store/taskSlice';
 
 const Wrapper = styled.div`
   display: flex;

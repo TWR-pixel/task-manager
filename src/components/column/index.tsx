@@ -3,22 +3,22 @@ import { useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import { Task } from '../../interfaces/interfaces';
-
 import TaskList from '../taskList';
 
-import { moveTask } from '../../../store/taskSlice';
+import { moveTask, Task } from '../../../store/taskSlice';
+import { StDeleteColumn } from '../../../public/assets/deleteColumn';
 
-const Wrapper = styled.div`
-  min-width: auto;
+const Wrapper = styled.li`
+  position: relative;
   min-height: 100px;
+  min-width: 360px;
+  padding: 16px;
 
-  padding: 20px;
-  margin: 0 10px;
+  border-radius: 6px;
 
-  border-radius: 5px;
+  background-color: #73737390;
 
-  background-color: #737373;
+  list-style: none;
 `;
 
 const TitleInput = styled.input`
@@ -43,11 +43,18 @@ interface ColumnProps {
   tasks: Task[];
   id: string;
   onEditTitle: (newTitle: string) => void;
+  onDelete: () => void;
 }
 
-const Column: FC<ColumnProps> = ({ title, tasks, id, onEditTitle }) => {
+const Column: FC<ColumnProps> = ({
+  title,
+  tasks,
+  id,
+  onEditTitle,
+  onDelete,
+}) => {
   const dispatch = useDispatch();
-  const [{ canDrop, isOver }, drop] = useDrop({
+  const [{}, drop] = useDrop({
     accept: 'TASK',
     drop: (item: { id: string; column: string }) => {
       if (item.column !== id) {
@@ -62,18 +69,20 @@ const Column: FC<ColumnProps> = ({ title, tasks, id, onEditTitle }) => {
     }),
   });
 
+  const protectedColumns = ['todo', 'inProgress', 'completed'];
+
   return (
     <Wrapper ref={drop}>
+      {!protectedColumns.includes(id) && (
+        <StDeleteColumn onClick={onDelete}>Удалить</StDeleteColumn>
+      )}
       <TitleInput
         type="text"
-        defaultValue={title} // Устанавливаем текущее название колонки
-        onBlur={(e) => onEditTitle(e.target.value)} // Изменяем название при потере фокуса
+        defaultValue={title}
+        onBlur={(e) => onEditTitle(e.target.value)}
       />
-      {tasks.length > 0 ? (
-        <TaskList tasks={tasks} />
-      ) : (
-        <p>Нет задач для отображения.</p>
-      )}
+
+      <TaskList tasks={tasks} columnId={id} />
     </Wrapper>
   );
 };

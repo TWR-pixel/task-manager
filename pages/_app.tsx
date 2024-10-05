@@ -2,13 +2,12 @@ import { createContext, useState } from 'react';
 import { Provider } from 'react-redux';
 import { AppProps } from 'next/app';
 
-import { Task } from '../src/interfaces/interfaces';
-
 import { GlobalStyles } from '../styles/global-styles';
 
 import { ModalComponent } from '../src/components/modal';
 
 import store from '../store/store';
+import { Task } from '../store/taskSlice';
 
 interface ModalsContextInterface {
   isModalOpen: boolean;

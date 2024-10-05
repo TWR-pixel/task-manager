@@ -2,7 +2,9 @@ import { FC, FormEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Task } from '../../interfaces/interfaces';
+import { Task } from '../../../store/taskSlice';
+
+
 
 const StyledForm = styled.form`
   display: flex;

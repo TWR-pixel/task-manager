@@ -1,7 +1,17 @@
 // Импортируем необходимые функции и типы из Redux Toolkit
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Task } from '../src/interfaces/interfaces';
+
+export interface Task {
+   id: string;
+   title: string;
+   description: string;
+   completed: boolean;
+   deleted: boolean;
+   inProgress?: boolean;
+   column: string;
+ }
+ 
 
 // Интерфейс для состояния задач
 interface TasksState {
