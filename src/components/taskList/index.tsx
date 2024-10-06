@@ -2,11 +2,11 @@ import { FC, useContext } from 'react';
 import styled from 'styled-components';
 
 import { ModalsContext } from '../../../pages/_app';
+import { Task } from '../../../store/taskSlice';
+
+import { AddTaskButton } from '../buttons/addTask';
 
 import { TaskItem } from '../taskItem';
-import AddTaskButton from '../buttons';
-
-import { Task } from '../../../store/taskSlice';
 
 const Wrapper = styled.div`
   display: flex;
@@ -34,8 +34,8 @@ const TaskList: FC<TaskListInterface> = ({ tasks, columnId }) => {
     openModal('view', task);
   };
 
-  const handleDeleteTaskRequest = (id: string) => {
-    openModal('confirmDelete', { id } as Task);
+  const handleDeleteTaskRequest = (task: Task) => {
+    openModal('confirmDelete', task);
   };
 
   // Условие для рендеринга кнопки "Добавить задачу"

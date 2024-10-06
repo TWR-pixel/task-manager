@@ -1,7 +1,12 @@
+import { useContext } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-
 import styled from 'styled-components';
+
+import { RegistationButton } from '../src/components/buttons/registration';
+import { LoginButton } from '../src/components/buttons/login';
+
+import { ModalsContext } from './_app';
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,6 +45,8 @@ const StLink = styled(Link)`
 `;
 
 const Home = () => {
+  const { openModal } = useContext(ModalsContext);
+
   return (
     <>
       <Head>
@@ -50,6 +57,8 @@ const Home = () => {
       <Wrapper>
         <Text>Использовать TaskManager</Text>
         <StLink href="/all">Начать</StLink>
+        <LoginButton onClick={() => openModal('login')} />
+        <RegistationButton onClick={() => openModal('registration')} />
       </Wrapper>
     </>
   );

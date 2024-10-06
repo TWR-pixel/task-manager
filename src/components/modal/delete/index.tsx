@@ -1,26 +1,19 @@
 import { FC, useContext } from 'react';
 import styled from 'styled-components';
 
-import { ModalsContext } from '../../../../pages/_app';
-
 import { Task } from '../../../../store/taskSlice';
 
-const Wrapper = styled.div`
+import { ModalsContext } from '../../../../pages/_app';
+
+import { StButton } from '../../form/styles';
+
+import { Text, Title, Wrapper } from '../styles';
+
+const Block = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  height: 100%;
-
-  strong {
-    color: #00d0ff;
-  }
-`;
-
-const SecondTitle = styled.h2`
-  text-align: center;
-
-  color: #84848480;
+  flex-direction: row;
+  justify-content: center;
+  gap: 40px;
 `;
 
 interface DeleteModalInterface {
@@ -35,10 +28,12 @@ export const DeleteModal: FC<DeleteModalInterface> = ({
   const { closeModal } = useContext(ModalsContext);
   return (
     <Wrapper>
-      <SecondTitle>Удалить задачу?</SecondTitle>
-      <p>Вы уверены, что хотите удалить задачу "{editingTask.title}"?</p>
-      <button onClick={confirmDeleteTask}>Удалить</button>
-      <button onClick={closeModal}>Отмена</button>
+      <Title>Удалить задачу?</Title>
+      <Text>Вы уверены, что хотите удалить задачу "{editingTask.title}"?</Text>
+      <Block>
+        <StButton onClick={confirmDeleteTask}>Удалить</StButton>
+        <StButton onClick={closeModal}>Отмена</StButton>
+      </Block>
     </Wrapper>
   );
 };

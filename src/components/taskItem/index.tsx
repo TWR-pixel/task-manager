@@ -50,7 +50,7 @@ const Title = styled.h1`
 
 interface TaskItemProps {
   task: Task;
-  onDelete: (id: string) => void;
+  onDelete: (task: Task) => void;
   onEdit: (task: Task) => void;
   onView: (task: Task) => void;
 }
@@ -86,7 +86,7 @@ export const TaskItem: FC<TaskItemProps> = ({
         <StDeleteIcon
           onClick={(e) => {
             e.stopPropagation();
-            onDelete(task.id);
+            onDelete(task);
           }}
         />
       </Wrapper>

@@ -3,8 +3,6 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
-import Column from '../column';
-
 import store from '../../../store/store';
 import { useAppSelector } from '../../../store/hooks';
 import { setTasks } from '../../../store/taskSlice';
@@ -14,8 +12,9 @@ import {
   setColumns,
   updateColumn,
 } from '../../../store/columnSlice';
-
 import { StAddColumn } from '../../../public/assets/addColumn';
+
+import Column from '../column';
 
 const List = styled.ul`
   display: flex;

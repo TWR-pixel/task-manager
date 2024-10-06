@@ -1,30 +1,13 @@
 import { FC, useContext } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
-
-import { ModalsContext } from '../../../../pages/_app';
-
-import { TaskForm } from '../../taskForm';
 
 import { Task, updateTask } from '../../../../store/taskSlice';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+import { ModalsContext } from '../../../../pages/_app';
 
-  height: 100%;
+import { TaskForm } from '../../form/task';
 
-  strong {
-    color: #00d0ff;
-  }
-`;
-
-const SecondTitle = styled.h2`
-  text-align: center;
-
-  color: #84848480;
-`;
+import { Title, Wrapper } from '../styles';
 
 interface EditingModalInterface {
   editingTask: Task;
@@ -40,7 +23,7 @@ export const EditingModal: FC<EditingModalInterface> = ({ editingTask }) => {
   };
   return (
     <Wrapper>
-      <SecondTitle>Редактирование</SecondTitle>
+      <Title>Редактирование</Title>
       <TaskForm onAdd={handleAddOrUpdateTask} editingTask={editingTask} />
     </Wrapper>
   );
