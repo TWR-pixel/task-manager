@@ -1,43 +1,26 @@
 import { useContext } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 
 import { ModalsContext } from '../../../../pages/_app';
 
-import { TaskForm } from '../../taskForm';
-
 import { addTask, Task } from '../../../../store/taskSlice';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+import { TaskForm } from '../../form/task';
 
-  height: 100%;
-
-  strong {
-    color: #00d0ff;
-  }
-`;
-
-const SecondTitle = styled.h2`
-  text-align: center;
-
-  color: #84848480;
-`;
+import { Title, Wrapper } from '../styles';
 
 export const AddModal = () => {
   const { closeModal } = useContext(ModalsContext);
   const dispatch = useDispatch();
 
-  // Обработчик добавления задачи
   const handleAddTask = (task: Task) => {
-    dispatch(addTask(task)); // Диспетчеризуем экшен добавления задачи
+    dispatch(addTask(task));
     closeModal();
   };
+
   return (
     <Wrapper>
-      <SecondTitle>Новый список</SecondTitle>
+      <Title>Новый список</Title>
       <TaskForm onAdd={handleAddTask} />
     </Wrapper>
   );

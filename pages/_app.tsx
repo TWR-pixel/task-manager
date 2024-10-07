@@ -11,9 +11,15 @@ import { Task } from '../store/taskSlice';
 
 interface ModalsContextInterface {
   isModalOpen: boolean;
-  modalMode: 'view' | 'edit' | 'add' | 'confirmDelete';
+  modalMode:
+    | 'view'
+    | 'edit'
+    | 'add'
+    | 'confirmDelete'
+    | 'registration'
+    | 'login';
   openModal: (
-    mode: 'view' | 'edit' | 'add' | 'confirmDelete',
+    mode: 'view' | 'edit' | 'add' | 'confirmDelete' | 'registration' | 'login',
     task?: Task | null,
     onConfirm?: (id: string) => void
   ) => void;
@@ -34,7 +40,7 @@ export const ModalsContext = createContext<ModalsContextInterface>({
 function CustomApp({ Component, pageProps }: AppProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<
-    'view' | 'edit' | 'add' | 'confirmDelete'
+    'view' | 'edit' | 'add' | 'confirmDelete' | 'registration' | 'login'
   >('add');
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [confirmDeleteTaskId, setConfirmDeleteTaskId] = useState<string | null>(
@@ -42,7 +48,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
   );
 
   const openModal = (
-    mode: 'view' | 'edit' | 'add' | 'confirmDelete',
+    mode: 'view' | 'edit' | 'add' | 'confirmDelete' | 'registration' | 'login',
     task?: Task | null
   ) => {
     setModalMode(mode);
