@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { StDeleteColumn } from '../../../public/assets/deleteColumn';
 
-import { moveTask, Task } from '../../../store/taskSlice';
+import { moveTask, Task } from '../../store/taskSlice';
 
 import TaskList from '../taskList';
 

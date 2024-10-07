@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { ModalsContext } from '../../../../pages/_app';
 
-import { addTask, Task } from '../../../../store/taskSlice';
+import { addTask, Task } from '../../../store/taskSlice';
 
 import { TaskForm } from '../../form/task';
 
@@ -14,7 +14,14 @@ export const AddModal = () => {
   const dispatch = useDispatch();
 
   const handleAddTask = (task: Task) => {
-    dispatch(addTask(task));
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+      console.error('User ID not found in localStorage');
+      return; // Выход из функции, если userId не найден
+    }
+
+    dispatch(addTask({ ...task, userId }));
     closeModal();
   };
 

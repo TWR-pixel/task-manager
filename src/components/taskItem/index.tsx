@@ -7,7 +7,8 @@ import { List } from '../../../styles/styles';
 import { StEditIcon } from '../../../public/assets/edit';
 import { StDeleteIcon } from '../../../public/assets/delete';
 
-import { Task } from '../../../store/taskSlice';
+import { Task } from '../../store/taskSlice';
+import { formatDate } from '../../utils/dateUtils';
 
 const StList = styled(List)`
   border-radius: 6px;
@@ -73,6 +74,7 @@ export const TaskItem: FC<TaskItemProps> = ({
     <StList ref={drag}>
       <TaskBlock onClick={() => onView(task)}>
         <Title>{task.title}</Title>
+        <p>{task.dueDate ? formatDate(task.dueDate) : ''} </p>
       </TaskBlock>
       <Wrapper>
         <StEditIcon

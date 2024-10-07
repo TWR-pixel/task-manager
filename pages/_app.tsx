@@ -6,8 +6,8 @@ import { GlobalStyles } from '../styles/global-styles';
 
 import { ModalComponent } from '../src/components/modal';
 
-import store from '../store/store';
-import { Task } from '../store/taskSlice';
+import store from '../src/store/store';
+import { Task } from '../src/store/taskSlice';
 
 interface ModalsContextInterface {
   isModalOpen: boolean;

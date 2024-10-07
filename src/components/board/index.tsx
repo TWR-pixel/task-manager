@@ -3,18 +3,19 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
-import store from '../../../store/store';
-import { useAppSelector } from '../../../store/hooks';
-import { setTasks } from '../../../store/taskSlice';
+import store from '../../store/store';
+import { useAppSelector } from '../../store/hooks';
+import { setTasks } from '../../store/taskSlice';
 import {
   addColumn,
   deleteColumn,
   setColumns,
   updateColumn,
-} from '../../../store/columnSlice';
+} from '../../store/columnSlice';
 import { StAddColumn } from '../../../public/assets/addColumn';
 
 import Column from '../column';
+import { getTasks } from '../../services/taskService';
 
 const List = styled.ul`
   display: flex;
@@ -63,24 +64,23 @@ export const Board: FC = () => {
     }
   }, [dispatch]);
 
-  //загружаем задачи из localStorage
-  useEffect(() => {
-    const unsubscribe = store.subscribe(() => {
-      const state = store.getState();
-      localStorage.setItem('tasks', JSON.stringify(state.tasks.tasks));
-      localStorage.setItem('columns', JSON.stringify(state.columns.columns));
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  // сохраняем Задачи в localStorage
-  useEffect(() => {
-    const savedTasks = localStorage.getItem('tasks');
-    if (savedTasks) {
-      dispatch(setTasks(JSON.parse(savedTasks)));
+  // Функция для загрузки задач из API
+  const loadTasks = async () => {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    if (token && userId) {
+      try {
+        const tasksData = await getTasks(token, userId); // Получаем задачи по userId
+        dispatch(setTasks(tasksData));
+      } catch (error) {
+        console.log('Ошибка при загрузке задач:', error);
+      }
     }
+  };
+
+  // Загружаем задачи при монтировании компонента
+  useEffect(() => {
+    loadTasks();
   }, [dispatch]);
 
   const handleAddColumn = () => {

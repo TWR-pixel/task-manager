@@ -2,7 +2,7 @@ import { FC, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { ModalsContext } from '../../../pages/_app';
-import { deleteTask } from '../../../store/taskSlice';
+import { deleteTask } from '../../store/taskSlice';
 
 import { Modal } from '../../modules/modal';
 

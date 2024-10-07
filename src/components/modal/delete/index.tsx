@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react';
 import styled from 'styled-components';
 
-import { Task } from '../../../../store/taskSlice';
+import { Task } from '../../../store/taskSlice';
 
 import { ModalsContext } from '../../../../pages/_app';
 
