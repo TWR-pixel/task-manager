@@ -21,7 +21,11 @@ export const handleRegistration = async (
       throw new Error('Ошибка при регистрации!');
     }
 
-    return await response.json();
+    const { userId, token } = await response.json(); // Сервер возвращает userId и token
+    localStorage.setItem('userId', userId); 
+    localStorage.setItem('token', token); 
+
+    return { userId, token }; 
   } catch (error) {
     throw new Error('Ошибка при регистрации. Попробуйте снова!');
   }
@@ -42,8 +46,12 @@ export const handleLogin = async (email: string, password: string) => {
     if (!response.ok) {
       throw new Error('Неверные учетные данные');
     }
-    const { token } = await response.json();
-    localStorage.setItem('token', token);
+
+    const { userId, token } = await response.json(); // Сервер возвращает userId и token
+    localStorage.setItem('userId', userId); 
+    localStorage.setItem('token', token); 
+
+    return { userId, token }; 
   } catch (error) {
     throw new Error('Ошибка при авторизации. Попробуйте снова!');
   }
