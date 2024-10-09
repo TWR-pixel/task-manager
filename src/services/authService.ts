@@ -1,3 +1,34 @@
+import { useRouter } from 'next/router';
+
+export const handleLogin = async (email: string, password: string) => {
+  const userData = { email, password };
+
+  try {
+    const response = await fetch('/api/auth', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Неверные учетные данные');
+    }
+
+    const { userId, token } = await response.json(); // Сервер возвращает userId и token
+    localStorage.setItem('userId', userId);
+    localStorage.setItem('token', token);
+
+    const router = useRouter();
+    router.push('/all');
+
+    return { userId, token };
+  } catch (error) {
+    throw new Error('Ошибка при авторизации. Попробуйте снова!');
+  }
+};
+
 export const handleRegistration = async (
   username: string,
   email: string,
@@ -25,34 +56,12 @@ export const handleRegistration = async (
     localStorage.setItem('userId', userId);
     localStorage.setItem('token', token);
 
+    const router = useRouter();
+
+    router.push('/all');
+
     return { userId, token };
   } catch (error) {
     throw new Error('Ошибка при регистрации. Попробуйте снова!');
-  }
-};
-
-export const handleLogin = async (email: string, password: string) => {
-  const userData = { email, password };
-
-  try {
-    const response = await fetch('/api/auth', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
-
-    if (!response.ok) {
-      throw new Error('Неверные учетные данные');
-    }
-
-    const { userId, token } = await response.json(); // Сервер возвращает userId и token
-    localStorage.setItem('userId', userId);
-    localStorage.setItem('token', token);
-
-    return { userId, token };
-  } catch (error) {
-    throw new Error('Ошибка при авторизации. Попробуйте снова!');
   }
 };
