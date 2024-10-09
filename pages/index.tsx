@@ -56,7 +56,7 @@ const Home = () => {
       </Head>
       <Wrapper>
         <Text>Использовать TaskManager</Text>
-        {/*<StLink href="/all">Начать</StLink>*/}
+        <StLink href="/all">Начать</StLink>
         <LoginButton onClick={() => openModal('login')} />
         <RegistationButton onClick={() => openModal('registration')} />
       </Wrapper>
