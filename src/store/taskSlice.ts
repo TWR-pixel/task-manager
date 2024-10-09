@@ -1,5 +1,6 @@
 // Импортируем необходимые функции и типы из Redux Toolkit
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import { getCurrentDate } from '../utils/dateUtils';
 
 export interface Task {
@@ -41,7 +42,7 @@ const tasksSlice = createSlice({
     addTask(state, action: PayloadAction<Task>) {
       const userId = localStorage.getItem('userId');
 
-      // Проверяем, есть ли userId
+      //Проверяем, есть ли userId
       if (!userId) {
         console.error('Ошибка: userId не найден в localStorage');
         return;

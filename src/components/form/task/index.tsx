@@ -1,11 +1,12 @@
 import { FC, FormEvent, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Task } from '../../../store/taskSlice';
+
 import { getCurrentDate } from '../../../utils/dateUtils';
 
 import { Input, StButton, StForm, Wrapper } from '../styles';
-import styled from 'styled-components';
 
 const DateBlock = styled.div`
   display: flex;

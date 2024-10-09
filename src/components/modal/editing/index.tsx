@@ -18,7 +18,7 @@ export const EditingModal: FC<EditingModalInterface> = ({ editingTask }) => {
   const dispatch = useDispatch();
 
   const handleAddOrUpdateTask = (task: Task) => {
-    const userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId') || '';
 
     if (!userId) {
       console.error('User ID not found in localStorage');

@@ -22,10 +22,10 @@ export const handleRegistration = async (
     }
 
     const { userId, token } = await response.json(); // Сервер возвращает userId и token
-    localStorage.setItem('userId', userId); 
-    localStorage.setItem('token', token); 
+    localStorage.setItem('userId', userId);
+    localStorage.setItem('token', token);
 
-    return { userId, token }; 
+    return { userId, token };
   } catch (error) {
     throw new Error('Ошибка при регистрации. Попробуйте снова!');
   }
@@ -48,10 +48,10 @@ export const handleLogin = async (email: string, password: string) => {
     }
 
     const { userId, token } = await response.json(); // Сервер возвращает userId и token
-    localStorage.setItem('userId', userId); 
-    localStorage.setItem('token', token); 
+    localStorage.setItem('userId', userId);
+    localStorage.setItem('token', token);
 
-    return { userId, token }; 
+    return { userId, token };
   } catch (error) {
     throw new Error('Ошибка при авторизации. Попробуйте снова!');
   }

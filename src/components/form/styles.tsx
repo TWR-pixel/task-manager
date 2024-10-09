@@ -43,7 +43,7 @@ export const StButton = styled.button`
   padding: 10px;
 
   background-color: transparent;
-  
+
   border: none;
   border-radius: 8px;
 

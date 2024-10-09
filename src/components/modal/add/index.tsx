@@ -14,7 +14,7 @@ export const AddModal = () => {
   const dispatch = useDispatch();
 
   const handleAddTask = (task: Task) => {
-    const userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId') || '';
 
     if (!userId) {
       console.error('User ID not found in localStorage');
