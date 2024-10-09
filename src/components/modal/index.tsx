@@ -2,6 +2,7 @@ import { FC, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { ModalsContext } from '../../../pages/_app';
+import { deleteTask } from '../../store/taskSlice';
 
 import { Modal } from '../../modules/modal';
 
@@ -9,8 +10,8 @@ import { ViewModal } from './view';
 import { EditingModal } from './editing';
 import { DeleteModal } from './delete';
 import { AddModal } from './add';
-
-import { deleteTask } from '../../../store/taskSlice';
+import { RegistrationModal } from './registration';
+import { LoginModal } from './login';
 
 export const ModalComponent: FC = () => {
   const {
@@ -25,6 +26,7 @@ export const ModalComponent: FC = () => {
 
   const confirmDeleteTask = () => {
     if (confirmDeleteTaskId) {
+      console.log('Confirming deletion of task with ID:', confirmDeleteTaskId);
       dispatch(deleteTask(confirmDeleteTaskId)); // Удаляем задачу по ID
       closeModal();
     }
@@ -48,6 +50,10 @@ export const ModalComponent: FC = () => {
           confirmDeleteTask={confirmDeleteTask}
         />
       )}
+
+      {modalMode === 'registration' && <RegistrationModal />}
+
+      {modalMode === 'login' && <LoginModal />}
     </Modal>
   );
 };

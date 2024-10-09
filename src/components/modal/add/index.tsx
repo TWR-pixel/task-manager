@@ -1,43 +1,33 @@
 import { useContext } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 
 import { ModalsContext } from '../../../../pages/_app';
 
-import { TaskForm } from '../../taskForm';
+import { addTask, Task } from '../../../store/taskSlice';
 
-import { addTask, Task } from '../../../../store/taskSlice';
+import { TaskForm } from '../../form/task';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  height: 100%;
-
-  strong {
-    color: #00d0ff;
-  }
-`;
-
-const SecondTitle = styled.h2`
-  text-align: center;
-
-  color: #84848480;
-`;
+import { Title, Wrapper } from '../styles';
 
 export const AddModal = () => {
   const { closeModal } = useContext(ModalsContext);
   const dispatch = useDispatch();
 
-  // Обработчик добавления задачи
   const handleAddTask = (task: Task) => {
-    dispatch(addTask(task)); // Диспетчеризуем экшен добавления задачи
+    const userId = localStorage.getItem('userId') || '';
+
+    if (!userId) {
+      console.error('User ID not found in localStorage');
+      return; // Выход из функции, если userId не найден
+    }
+
+    dispatch(addTask({ ...task, userId }));
     closeModal();
   };
+
   return (
     <Wrapper>
-      <SecondTitle>Новый список</SecondTitle>
+      <Title>Новый список</Title>
       <TaskForm onAdd={handleAddTask} />
     </Wrapper>
   );

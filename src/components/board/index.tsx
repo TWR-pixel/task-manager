@@ -3,19 +3,25 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
+import { StAddColumn } from '../../../public/assets/addColumn';
+
+import { useAppSelector } from '../../store/hooks';
+import { addColumn, deleteColumn, updateColumn } from '../../store/columnSlice';
+
+import { filterTaskByFilter, filterTasksByColumn } from '../../utils/taskUtils';
+
+import { addColumnApi } from '../../services/columnService';
+
 import Column from '../column';
 
-import store from '../../../store/store';
-import { useAppSelector } from '../../../store/hooks';
-import { setTasks } from '../../../store/taskSlice';
-import {
-  addColumn,
-  deleteColumn,
-  setColumns,
-  updateColumn,
-} from '../../../store/columnSlice';
+import { TaskFilter } from './filter';
 
-import { StAddColumn } from '../../../public/assets/addColumn';
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+`;
 
 const List = styled.ul`
   display: flex;
@@ -52,46 +58,29 @@ const List = styled.ul`
 
 export const Board: FC = () => {
   const [columnTitle, setColumnTitle] = useState('Название');
-  const tasks = useAppSelector((state) => state.tasks.tasks);
-  const columns = useAppSelector((state) => state.columns.columns);
+  const [filter, setFilter] = useState<string>('all');
   const dispatch = useDispatch();
 
-  // Загружаем колонки из localStorage
-  useEffect(() => {
-    const savedColumns = localStorage.getItem('columns');
-    if (savedColumns) {
-      dispatch(setColumns(JSON.parse(savedColumns)));
-    }
-  }, [dispatch]);
+  const tasks = useAppSelector((state) => state.tasks.tasks);
+  const columns = useAppSelector((state) => state.columns.columns);
 
-  //загружаем задачи из localStorage
-  useEffect(() => {
-    const unsubscribe = store.subscribe(() => {
-      const state = store.getState();
-      localStorage.setItem('tasks', JSON.stringify(state.tasks.tasks));
-      localStorage.setItem('columns', JSON.stringify(state.columns.columns));
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  // сохраняем Задачи в localStorage
-  useEffect(() => {
-    const savedTasks = localStorage.getItem('tasks');
-    if (savedTasks) {
-      dispatch(setTasks(JSON.parse(savedTasks)));
-    }
-  }, [dispatch]);
-
-  const handleAddColumn = () => {
+  const handleAddColumn = async () => {
     if (columnTitle.trim()) {
-      const newColumn = {
-        id: uuidv4(),
-        title: columnTitle,
-      };
-      dispatch(addColumn(newColumn));
-      setColumnTitle('Название');
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
+      if (token && userId) {
+        const newColumn = {
+          id: uuidv4(),
+          title: columnTitle,
+        };
+        try {
+          const createdColumn = await addColumnApi(token, userId, newColumn);
+          dispatch(addColumn(createdColumn));
+          setColumnTitle('Название');
+        } catch (error) {
+          console.error('Ошибка при добавлении колонки:', error);
+        }
+      }
     }
   };
 
@@ -103,26 +92,42 @@ export const Board: FC = () => {
     dispatch(deleteColumn(id));
   };
 
-  const filterTasksByColumn = useMemo(() => {
-    return (columnId: string) =>
-      tasks.filter((task) => task.column === columnId);
-  }, [tasks]);
+  // Подсчет задач для каждого фильтра
+  const tasksCount = useMemo(
+    () => ({
+      recentlyAdded: filterTaskByFilter(tasks, 'recentlyAdded').length,
+      today: filterTaskByFilter(tasks, 'today').length,
+      week: filterTaskByFilter(tasks, 'week').length,
+      all: filterTaskByFilter(tasks, 'all').length,
+    }),
+    [tasks]
+  );
+
+  const filteredTasksByColumn = (columnId: string) =>
+    filterTasksByColumn(tasks, filter, columnId);
 
   return (
-    <List>
-      {columns.map((column) => (
-        <Column
-          key={column.id}
-          id={column.id}
-          title={column.title}
-          tasks={filterTasksByColumn(column.id)}
-          onEditTitle={(newTitle) =>
-            handleChangeColumnTitle(column.id, newTitle)
-          }
-          onDelete={() => handleDeleteColumn(column.id)}
-        />
-      ))}
-      <StAddColumn onClick={handleAddColumn} />
-    </List>
+    <Wrapper>
+      <TaskFilter
+        tasksCount={tasksCount}
+        currentFilter={filter}
+        onFilterChange={setFilter}
+      />
+
+      <List>
+        {columns.map(({ id, title }) => (
+          <Column
+            key={id}
+            id={id}
+            title={title}
+            tasks={filteredTasksByColumn(id)}
+            onEditTitle={(newTitle) => handleChangeColumnTitle(id, newTitle)}
+            onDelete={() => handleDeleteColumn(id)}
+          />
+        ))}
+
+        <StAddColumn onClick={handleAddColumn} />
+      </List>
+    </Wrapper>
   );
 };

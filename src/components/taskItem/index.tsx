@@ -7,16 +7,20 @@ import { List } from '../../../styles/styles';
 import { StEditIcon } from '../../../public/assets/edit';
 import { StDeleteIcon } from '../../../public/assets/delete';
 
-import { Task } from '../../../store/taskSlice';
+import { calculateDaysLeft, formatDate } from '../../utils/dateUtils';
 
-const StList = styled(List)`
+import { Task } from '../../store/taskSlice';
+
+const StList = styled(List)<{ border: string }>`
   border-radius: 6px;
   outline: none;
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.2s ease;
+  border: 1px solid ${({ border }) => border};
+
   &:hover {
-    background-color: #4d380085;
+    /*background-color: #4d380085;*/
     transform: scale(1.02);
   }
 
@@ -50,7 +54,7 @@ const Title = styled.h1`
 
 interface TaskItemProps {
   task: Task;
-  onDelete: (id: string) => void;
+  onDelete: (task: Task) => void;
   onEdit: (task: Task) => void;
   onView: (task: Task) => void;
 }
@@ -69,10 +73,23 @@ export const TaskItem: FC<TaskItemProps> = ({
     }),
   });
 
+  const daysLeft = calculateDaysLeft(task.dueDate || '');
+
+  const borderColor = () => {
+    if (daysLeft <= 3) {
+      return '#ff4d4d';
+    } else if (daysLeft <= 7) {
+      return '#ff9d00';
+    } else {
+      return 'transparent';
+    }
+  };
+
   return (
-    <StList ref={drag}>
+    <StList ref={drag} border={borderColor()}>
       <TaskBlock onClick={() => onView(task)}>
         <Title>{task.title}</Title>
+        <p>{task.dueDate ? formatDate(task.dueDate) : ''} </p>
       </TaskBlock>
       <Wrapper>
         <StEditIcon
@@ -86,7 +103,7 @@ export const TaskItem: FC<TaskItemProps> = ({
         <StDeleteIcon
           onClick={(e) => {
             e.stopPropagation();
-            onDelete(task.id);
+            onDelete(task);
           }}
         />
       </Wrapper>

@@ -1,38 +1,16 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
-import { Task } from '../../../../store/taskSlice';
+import { Task } from '../../../store/taskSlice';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  height: 100%;
-
-  strong {
-    color: #00d0ff;
-  }
-`;
+import { Text, Title, Wrapper } from '../styles';
+import { formatDate } from '../../../utils/dateUtils';
 
 const StBlock = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: start;
   gap: 20px;
-`;
-
-const FirstTitle = styled.h1`
-  font-size: 40px;
-
-  text-align: center;
-
-  color: #ffffff;
-`;
-
-const Text = styled.p`
-  font-size: 30px;
-
-  color: #ffffffe1;
 `;
 
 interface ViewModalInterface {
@@ -42,10 +20,19 @@ interface ViewModalInterface {
 export const ViewModal: FC<ViewModalInterface> = ({ editingTask }) => {
   return (
     <Wrapper>
+      <Title>{editingTask.title}</Title>
       <StBlock>
-        <FirstTitle>{editingTask.title}</FirstTitle>
         <Text>
           <strong>Описание:</strong> {editingTask.description}
+        </Text>
+        <Text>
+          <strong>Дата добавления:</strong> {editingTask.createdDate}
+        </Text>
+        <Text>
+          <strong>Срок завершения:</strong>{' '}
+          {editingTask.dueDate
+            ? formatDate(editingTask.dueDate)
+            : 'Не установлен'}
         </Text>
       </StBlock>
     </Wrapper>

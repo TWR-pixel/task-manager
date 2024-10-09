@@ -3,10 +3,11 @@ import { useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import TaskList from '../taskList';
-
-import { moveTask, Task } from '../../../store/taskSlice';
 import { StDeleteColumn } from '../../../public/assets/deleteColumn';
+
+import { moveTask, Task } from '../../store/taskSlice';
+
+import TaskList from '../taskList';
 
 const Wrapper = styled.li`
   position: relative;

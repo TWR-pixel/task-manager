@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface Column {
+export interface Column {
+  userId?: string;
   id: string;
   title: string;
 }

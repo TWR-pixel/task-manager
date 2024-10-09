@@ -1,30 +1,13 @@
 import { FC, useContext } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
+
+import { Task, updateTask } from '../../../store/taskSlice';
 
 import { ModalsContext } from '../../../../pages/_app';
 
-import { TaskForm } from '../../taskForm';
+import { TaskForm } from '../../form/task';
 
-import { Task, updateTask } from '../../../../store/taskSlice';
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  height: 100%;
-
-  strong {
-    color: #00d0ff;
-  }
-`;
-
-const SecondTitle = styled.h2`
-  text-align: center;
-
-  color: #84848480;
-`;
+import { Title, Wrapper } from '../styles';
 
 interface EditingModalInterface {
   editingTask: Task;
@@ -35,12 +18,20 @@ export const EditingModal: FC<EditingModalInterface> = ({ editingTask }) => {
   const dispatch = useDispatch();
 
   const handleAddOrUpdateTask = (task: Task) => {
-    dispatch(updateTask(task)); // Диспетчеризуем экшен обновления задачи
+    const userId = localStorage.getItem('userId') || '';
+
+    if (!userId) {
+      console.error('User ID not found in localStorage');
+      return; // Выход из функции, если userId не найден
+    }
+
+    dispatch(updateTask({ ...task, userId }));
     closeModal();
   };
+
   return (
     <Wrapper>
-      <SecondTitle>Редактирование</SecondTitle>
+      <Title>Редактирование</Title>
       <TaskForm onAdd={handleAddOrUpdateTask} editingTask={editingTask} />
     </Wrapper>
   );

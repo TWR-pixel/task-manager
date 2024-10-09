@@ -1,17 +1,20 @@
 // Импортируем необходимые функции и типы из Redux Toolkit
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { getCurrentDate } from '../utils/dateUtils';
 
 export interface Task {
-   id: string;
-   title: string;
-   description: string;
-   completed: boolean;
-   deleted: boolean;
-   inProgress?: boolean;
-   column: string;
- }
- 
+  userId: string;
+  id: string;
+  title: string;
+  description: string;
+  createdDate: string;
+  dueDate?: string;
+  completed: boolean;
+  deleted: boolean;
+  inProgress?: boolean;
+  column: string;
+}
 
 // Интерфейс для состояния задач
 interface TasksState {
@@ -35,18 +38,33 @@ const tasksSlice = createSlice({
     setTasks(state, action: PayloadAction<Task[]>) {
       state.tasks = action.payload;
     },
+
     addTask(state, action: PayloadAction<Task>) {
+      const userId = localStorage.getItem('userId');
+
+      //Проверяем, есть ли userId
+      if (!userId) {
+        console.error('Ошибка: userId не найден в localStorage');
+        return;
+      }
+
       state.tasks.push({
         ...action.payload,
+        userId,
         column: 'todo', // Задачи по умолчанию добавляются в колонку "Нужно сделать"
+        createdDate: getCurrentDate(),
+        dueDate: action.payload.dueDate,
       });
     },
+
     deleteTask(state, action: PayloadAction<string>) {
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
+
     updateTask(state, action: PayloadAction<Task>) {
       const index = state.tasks.findIndex(
-        (task) => task.id === action.payload.id
+        (task) =>
+          task.id === action.payload.id && task.userId === action.payload.userId
       );
       if (index !== -1) {
         state.tasks[index] = action.payload;

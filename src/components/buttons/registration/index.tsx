@@ -1,8 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
-import { StAddColumn } from '../../../public/assets/addColumn';
-
 const StButton = styled.button`
   display: flex;
   align-items: center;
@@ -14,7 +12,7 @@ const StButton = styled.button`
   color: #ff9d00;
   background-color: transparent;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
+  transition: background-color 0.3s ease, transform 0.2s ease;
   border-radius: 8px;
   border: none;
 
@@ -28,16 +26,12 @@ const StButton = styled.button`
   }
 `;
 
-interface AddTaskButtonInterface {
+interface RegistationButtonInterface {
   onClick: () => void;
 }
 
-const AddTaskButton: FC<AddTaskButtonInterface> = ({ onClick }) => {
-  return (
-    <StButton onClick={onClick}>
-      Добавить <StAddColumn />
-    </StButton>
-  );
+export const RegistationButton: FC<RegistationButtonInterface> = ({
+  onClick,
+}) => {
+  return <StButton onClick={onClick}>Регистрация</StButton>;
 };
-
-export default AddTaskButton;
